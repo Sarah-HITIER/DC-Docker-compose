@@ -1,0 +1,29 @@
+version: "3.3"
+
+services:
+    db:
+        image: postgres:14.1
+        restart: always
+        environment:
+            POSTGRES_DB: current_db
+            POSTGRES_USER: current_user
+            POSTGRES_PASSWORD: current_mdp
+        volumes:
+            - db:/var/lib/postgresql/data
+
+    app:
+        image: release2789/server:1.0
+        restart: always
+        environment:
+            APP_HOST: "db"
+            APP_PORT: 5432
+            APP_USER: "current_user"
+            APP_DATABASE: "current_db"
+            APP_PASSWORD: "current_mdp"
+        ports:
+            - 8080:3000
+        depends_on:
+            - db
+
+volumes:
+    db:
